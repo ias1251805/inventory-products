@@ -11,4 +11,9 @@ import com.product.inventory.wm.model.Users;
 public interface UsersRepository extends JpaRepository<Users,Long>{
 	@Query("FROM Users WHERE email=?1")
 	Users findByEmail(String email);
+	
+	@Query("FROM Users")
+	List<Users> getAllUsers();
+	
+	
 }

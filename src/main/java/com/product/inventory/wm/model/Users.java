@@ -4,27 +4,32 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class Users {
 	
-	@JsonProperty("itemId")
+	@JsonProperty("id")
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long  userId;
+	private Long  id;
 	@JsonProperty("firstName")
 	private String firstName;
 	@JsonProperty("lastName")
 	private String lastName;
 	@JsonProperty("email")
 	private String email;
-	@JsonProperty("password")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 	@JsonProperty("role")
 	private String role;
+	@JsonProperty("jwtToken")
+	@Transient
+	private String jwtToken;
 	
 	public String getRole() {
 		return role;
@@ -33,10 +38,10 @@ public class Users {
 		this.role = role;
 	}
 	public Long getUserId() {
-		return userId;
+		return id;
 	}
 	public void setUserId(Long userId) {
-		this.userId = userId;
+		this.id = userId;
 	}
 	public String getFirstName() {
 		return firstName;
@@ -61,6 +66,12 @@ public class Users {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getJwtToken() {
+		return jwtToken;
+	}
+	public void setJwtToken(String jwtToken) {
+		this.jwtToken = jwtToken;
 	}
 	
 	

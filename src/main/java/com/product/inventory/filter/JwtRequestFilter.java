@@ -1,10 +1,12 @@
 package com.product.inventory.filter;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,6 @@ import com.product.inventory.wm.serviceImpl.MyUserDetailsService;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-	@Autowired
-	private MyUserDetailsService userDetailsService;
 
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -31,8 +31,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 
+//		final HttpServletRequest httpRequest = (HttpServletRequest) request;
+		//HttpServletRequest req = (HttpServletRequest) request;
+		
 		final String authorizationHeader = request.getHeader("Authorization");
-
+		//String endPoint = request.getRequestURI();
+		
 		String username = null;
 		String jwt = null;
 
@@ -42,7 +46,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		}
 
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
+			
 			// UserDetails userDetails =
 			// this.userDetailsService.loadUserByUsername(username);
 
@@ -54,6 +58,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 						.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+				
+				/*
+				 * if(endPoint.equalsIgnoreCase("/refresh-token")) {
+				 * 
+				 * request.setAttribute("email",username ); }
+				 */
 
 			}
 		}
